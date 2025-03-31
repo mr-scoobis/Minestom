@@ -1,0 +1,43 @@
+val gamemodeCommand = command(object : Arguments() {
+    val target by player {
+        description = "Target player"
+        suggest { _, _ -> onlinePlayers.map { it.username } }
+        optional = true
+    }
+
+    val mode by enum<GameMode> {
+        description = "Game mode to set"
+        autocomplete = true
+    }
+}) {
+    name = "gamemode"
+    aliases = listOf("gm")
+    description = "Changes a player's game mode"
+
+    +survival
+    +creative
+
+    execute { sender ->
+        val actualTarget = target ?: sender.asPlayer()
+        success("Changed ${actualTarget.username}'s gamemode to $mode")
+    }
+
+}
+
+val survival = command(object : Arguments() {}) {
+    name = "survival"
+    aliases = listOf("s", "0")
+
+    execute { sender ->
+        success("Set gamemode to survival")
+    }
+}
+
+val creative = command(object : Arguments() {}) {
+    name = "creative"
+    aliases = listOf("c", "1")
+
+    execute { sender ->
+        success("Set gamemode to creative")
+    }
+}

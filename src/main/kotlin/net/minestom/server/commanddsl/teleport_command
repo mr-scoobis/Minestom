@@ -1,0 +1,21 @@
+val teleportCommand = command(object : Arguments() {
+    val target by player {
+        description = "Player to teleport"
+        suggest { _, _ -> onlinePlayers.map { it.username } }
+    }
+
+    val location by vector3d {
+        description = "Destination coordinates"
+        optional = true
+    }
+}) {
+    name = "teleport"
+    aliases = listOf("tp")
+    description = "Teleports a player to a specified location"
+
+    execute { sender ->
+        // We can directly access arguments as properties
+        val destination = location ?: target.position
+        success("Teleported to $destination")
+    }
+}
